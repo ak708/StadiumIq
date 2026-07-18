@@ -3,8 +3,6 @@ import { speakText } from '@/utils/gemini'
 import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-// lucide-react removed
-import { IconContext } from 'react-icons';
 import { cn } from '@/lib/utils'
 
 import { LuDoorOpen, LuStethoscope, LuFireExtinguisher, LuUsers, LuAccessibility, LuShield, LuNavigation, LuVolume2, LuChevronDown, LuChevronRight, LuPlay, LuClock } from 'react-icons/lu';

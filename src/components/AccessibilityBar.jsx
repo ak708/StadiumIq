@@ -19,11 +19,13 @@ function ToggleBtn({ active, onClick, icon: Icon, label }) {
   return (
     <button
       onClick={onClick}
+      aria-label={label}
+      aria-pressed={active}
       className={`flex items-center gap-1.5 px-2 py-1 rounded-full transition-colors ${
         active ? 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300' : 'text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white'
       }`}
     >
-      <Icon className="w-4 h-4" />
+      <Icon className="w-4 h-4" aria-hidden="true" />
       <span className="text-xs hidden sm:inline">{label}</span>
     </button>
   )
@@ -47,6 +49,7 @@ export default function AccessibilityBar({
           id="toggle-audio"
           checked={audioMode}
           onCheckedChange={setAudioMode}
+          aria-label="Toggle Audio Mode"
         />
         <LuVolume2  className="w-3.5 h-3.5 text-slate-900/50 dark:text-white/50 group-hover:text-white/80 transition-colors"  />
         <span className="text-xs text-slate-900/50 dark:text-white/50 group-hover:text-white/80 transition-colors hidden sm:inline">Audio</span>
@@ -58,6 +61,7 @@ export default function AccessibilityBar({
           id="toggle-commentary"
           checked={visualMode}
           onCheckedChange={setVisualMode}
+          aria-label="Toggle Live Commentary"
         />
         <LuVolume2  className="w-3.5 h-3.5 text-slate-900/50 dark:text-white/50 group-hover:text-slate-900 dark:group-hover:text-white/80 transition-colors"  />
         <span className="text-xs text-slate-900/50 dark:text-white/50 group-hover:text-slate-900 dark:group-hover:text-white/80 transition-colors hidden sm:inline">Commentary</span>

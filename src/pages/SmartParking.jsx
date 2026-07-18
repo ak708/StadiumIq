@@ -5,8 +5,6 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-// lucide-react removed
-import { IconContext } from 'react-icons';
 import { cn } from '@/lib/utils'
 
 import { LuCircle, LuTicket, LuCar, LuMapPin, LuNavigation, LuArrowDownToLine, LuZap } from 'react-icons/lu';
@@ -21,7 +19,6 @@ const ENTRY_GATES = ['A', 'B']
 const VEHICLE_TYPES = ['Standard', 'Accessible (Wheelchair)', 'EV / Hybrid', 'Motorcycle']
 
 export default function SmartParking({ ctx }) {
-  const { language } = ctx
   const graph = STADIUM_PARKING_GRAPH
 
   const [step, setStep] = useState(1) // 1: form, 2: result, 3: qr

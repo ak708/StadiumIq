@@ -4,8 +4,6 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-// lucide-react removed
-import { IconContext } from 'react-icons';
 import { cn } from '@/lib/utils'
 
 import { LuMap, LuNavigation, LuZap, LuActivity, LuMegaphone } from 'react-icons/lu';
@@ -100,7 +98,7 @@ export default function CrowdOps() {
       const response = await chatWithGemini([{ role: 'user', content: prompt }], 'crowdOps', 'en')
       setAnnouncementText(response)
       setShowAnnounce(true)
-    } catch (e) {
+    } catch (_e) {
       setAnnouncementText(`Attention please: ${selectedGate} is currently at high capacity. Please proceed to nearest available gate. Thank you.`)
       setShowAnnounce(true)
     } finally {

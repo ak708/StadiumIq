@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { cn } from '@/lib/utils'
-// lucide-react removed
-import { IconContext } from 'react-icons';
+
 
 import { LuLayoutDashboard, LuBot, LuCircle, LuShield, LuUsers, LuUserCheck, LuShoppingBag } from 'react-icons/lu';
 
@@ -32,14 +31,17 @@ export default function MobileNav({ activePage, setActivePage }) {
 
   return (
     <nav className="mobile-nav pb-safe">
-      {items.map(({ icon: Icon, label, path }) => {
+      {items.map((item) => {
+        const { icon: Icon, label, path } = item
         const key = path.replace('/', '')
         const isActive = activePage === key
         return (
           <button
-            key={path}
+            key={label}
             id={`mobile-nav-${key}`}
             onClick={() => { navigate(path); setActivePage(key) }}
+            aria-label={label}
+            aria-current={isActive ? 'page' : undefined}
             className={cn(
               'flex-1 flex flex-col items-center justify-center py-3 gap-0.5 text-[0.65rem] font-medium transition-all duration-200',
               isActive ? 'text-cyan-400' : 'text-slate-900/40 dark:text-white/40 hover:text-slate-900/70 dark:hover:text-white/70'

@@ -5,7 +5,7 @@ import { Card } from '@/components/ui/card'
 import TicketTransfer from '@/components/TicketTransfer'
 import LiveMatchCenter from '@/components/LiveMatchCenter'
 // lucide-react removed
-import { IconContext } from 'react-icons';
+
 import { cn } from '@/lib/utils'
 import { db, isFirebaseConfigured } from '@/utils/firebase'
 import { doc, onSnapshot } from 'firebase/firestore'
@@ -185,7 +185,7 @@ export default function Dashboard({ ctx }) {
                 <span className="text-sm font-semibold text-slate-900/90 dark:text-white/90 group-hover:text-white text-left">{label}</span>
               </button>
             ))}
-            {isPremium && PREMIUM_ACTIONS.map(({ icon: Icon, label, path, color }) => (
+            {isPremium && PREMIUM_ACTIONS.map(({ icon: Icon, label, color }) => (
               <button
                 key={label}
                 className="group flex items-center gap-3 p-4 rounded-xl border border-yellow-500/20 bg-yellow-500/5 hover:bg-yellow-500/10 transition-all hover:-translate-y-0.5"

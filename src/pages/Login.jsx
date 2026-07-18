@@ -2,8 +2,6 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth, ROLES } from '@/context/AuthContext'
 import { Button } from '@/components/ui/button'
-// lucide-react removed
-import { IconContext } from 'react-icons';
 import { cn } from '@/lib/utils'
 
 import { LuFlaskConical, LuMail, LuGlobe, LuTrophy, LuUserPlus } from 'react-icons/lu';

@@ -1,8 +1,7 @@
-import { NavLink, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAuth } from '@/context/AuthContext'
 import { cn } from '@/lib/utils'
 // lucide-react removed
-import { IconContext } from 'react-icons';
 
 import { LuLayoutDashboard, LuBot, LuCircle, LuShield, LuUsers, LuBookOpen, LuSettings, LuUserCheck, LuTrophy, LuShoppingBag, LuTicket } from 'react-icons/lu';
 
@@ -24,7 +23,6 @@ export default function Sidebar({ activePage, setActivePage }) {
   const navigate = useNavigate()
   const userRole = profile?.role || 'fan'
   const isAdmin = userRole === 'admin'
-  const isStaff = userRole === 'staff' || userRole === 'admin'
 
   const visible = NAV_ITEMS.filter(item => {
     if (!item.role) return true;

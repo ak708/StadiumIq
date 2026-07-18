@@ -4,8 +4,6 @@ import { Card } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-// lucide-react removed
-import { IconContext } from 'react-icons';
 import { cn } from '@/lib/utils'
 
 import { LuHardHat, LuZap, LuClipboardList, LuVolume2, LuBookOpen, LuMessageSquare, LuSend, LuUsers, LuRadio } from 'react-icons/lu';
@@ -47,7 +45,7 @@ export default function StaffBrief({ ctx }) {
       const resp = await chatWithGemini([{ role: 'user', content: prompt }], 'staffBrief', language)
       setBriefing(resp)
       if (audioMode) speakText(resp, language)
-    } catch (e) {
+    } catch (_e) {
       setBriefing(`**Shift Briefing — ${v.name} | ${v.zone} | ${v.role}**\n\nReport to your zone by 20:30. Crowd at 94% capacity — be extra vigilant. Gate C is critical. Medical station 50m east. Radio Channel 3 for emergencies. You're doing great — thank you for making FIFA 2026 unforgettable! 🌍⚽`)
     } finally {
       setLoadingBriefing(false)
@@ -66,7 +64,7 @@ export default function StaffBrief({ ctx }) {
       const aiMsg = { id: Date.now() + 1, role: 'assistant', content: resp, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
       setMessages(prev => [...prev, aiMsg])
       if (audioMode) speakText(resp, language)
-    } catch (e) {
+    } catch (_e) {
       setMessages(prev => [...prev, { id: Date.now() + 1, role: 'assistant', content: 'Could not load SOP. Please check the physical manual or contact your supervisor on radio Channel 3.', time: '' }])
     } finally {
       setIsLoading(false)

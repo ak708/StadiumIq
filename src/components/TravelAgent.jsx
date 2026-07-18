@@ -33,7 +33,7 @@ export default function TravelAgent() {
     try {
       const response = await chatWithGemini(newMessages, 'travelAgent', profile?.lang || 'en')
       setMessages([...newMessages, { role: 'model', parts: [{ text: response }] }])
-    } catch (err) {
+    } catch (_err) {
       setMessages([...newMessages, { role: 'model', parts: [{ text: "Error connecting to Travel Agent AI." }] }])
     } finally {
       setLoading(false)

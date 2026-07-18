@@ -6,8 +6,6 @@ import { useAuth } from '@/context/AuthContext'
 import { db } from '@/utils/firebase'
 import { doc, getDoc, setDoc } from 'firebase/firestore'
 import { Badge } from '@/components/ui/badge'
-// lucide-react removed
-import { IconContext } from 'react-icons';
 import { cn } from '@/lib/utils'
 
 import { LuZap, LuVolumeX, LuTrash2, LuMic, LuSend } from 'react-icons/lu';
@@ -43,8 +41,6 @@ function getWelcomeMessage(language) {
     time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
   }
 }
-
-const STORAGE_KEY = 'fanassist_chat_v2'
 
 export default function FanAssist({ ctx }) {
   const { audioMode, visualMode, language } = ctx
