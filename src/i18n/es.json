@@ -1,0 +1,9 @@
+{
+  "fanAssist": {
+    "welcome": "¡Bienvenido a StadiumIQ FanAssist! ¿En qué puedo ayudarte hoy? ⚽🏆",
+    "placeholder": "Escribe tu pregunta…"
+  },
+  "dashboard": {
+    "title": "Centro de Control StadiumIQ"
+  }
+}

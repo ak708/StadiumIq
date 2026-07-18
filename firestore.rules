@@ -1,0 +1,21 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Users Collection ────────────────────────────────────
+    // Each user can read and write only their own profile document.
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+
+      // Admins can read any user profile
+      allow read: if request.auth != null &&
+        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    // ── Default: deny everything else ───────────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
