@@ -11,7 +11,8 @@ const HardHat = (props) => <LuHardHat {...props} />;
 const User = (props) => <LuUser {...props} />;
 
 export default function UserMenu() {
-  const { displayName, profile, logout, isAdmin, isStaff } = useAuth()
+  const ctx = useAuth()
+  const { displayName, profile, logout, isAdmin, isStaff } = ctx
   const [open, setOpen] = useState(false)
 
   const roleLabel = isAdmin ? 'Admin' : isStaff ? 'Staff' : 'Fan'
@@ -43,7 +44,7 @@ export default function UserMenu() {
           {/* Backdrop */}
           <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
           {/* Dropdown */}
-          <div className="absolute right-0 top-full mt-2 z-50 w-48 rounded-xl border border-slate-300 dark:border-white/10 bg-[#111827] shadow-card backdrop-blur-xl overflow-hidden animate-fade-in">
+          <div className="absolute right-0 top-full mt-2 z-50 w-48 rounded-xl border border-slate-300 dark:border-white/10 bg-white dark:bg-[#111827] shadow-card backdrop-blur-xl overflow-hidden animate-fade-in">
             <div className="px-3 py-2.5 border-b border-slate-300 dark:border-white/10">
               <div className="text-xs font-semibold text-slate-900/90 dark:text-white/90 truncate">{displayName}</div>
               <div className={cn('text-[0.65rem] flex items-center gap-1 mt-0.5', roleColor)}>
@@ -51,6 +52,31 @@ export default function UserMenu() {
                 {roleLabel}
               </div>
             </div>
+            
+            {/* GOD MODE ROLE SWITCHER FOR HACKATHON DEMO */}
+            <div className="px-3 py-2 border-b border-slate-300 dark:border-white/10 bg-indigo-500/10">
+              <div className="text-[0.55rem] font-bold text-indigo-400 uppercase tracking-wider mb-1">Demo Role Override</div>
+              <div className="flex gap-1">
+                {['fan', 'staff', 'admin'].map(r => (
+                  <button
+                    key={r}
+                    onClick={() => {
+                      ctx.setDemoRole(r)
+                      setOpen(false)
+                    }}
+                    className={cn(
+                      "flex-1 py-1 rounded text-[0.6rem] font-bold uppercase transition-colors",
+                      (ctx.profile?.role || 'fan') === r
+                        ? "bg-indigo-500 text-white"
+                        : "bg-slate-200 text-slate-500 hover:bg-slate-300 hover:text-slate-900 dark:bg-black/20 dark:text-slate-400 dark:hover:bg-black/40 dark:hover:text-slate-200"
+                    )}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
+            </div>
+
             <button
               id="btn-logout"
               onClick={() => { logout(); setOpen(false) }}

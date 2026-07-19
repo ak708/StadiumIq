@@ -5,6 +5,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { cn } from '@/lib/utils'
+import LiveTrafficVisualizer from '@/components/LiveTrafficVisualizer'
 
 import { LuMap, LuNavigation, LuZap, LuActivity, LuMegaphone } from 'react-icons/lu';
 
@@ -20,32 +21,7 @@ function generateCrowdData() {
   }))
 }
 
-const SECTION_GRID = [
-  ['102', '103', '104', '105', '106', '107'],
-  ['108', '109', '110', '111', '112', '113'],
-  ['114', '—PITCH—', '—PITCH—', '—PITCH—', '—PITCH—', '115'],
-  ['116', '—PITCH—', '—PITCH—', '—PITCH—', '—PITCH—', '117'],
-  ['118', '119', '120', '121', '122', '123'],
-  ['124', '125', '126', '127', '128', '129'],
-]
-
-const SECTION_DENSITY = {
-  '102': 72, '103': 55, '104': 88, '105': 95, '106': 67, '107': 42,
-  '108': 63, '109': 78, '110': 92, '111': 88, '112': 74, '113': 58,
-  '114': 45, '115': 61, '116': 53, '117': 79,
-  '118': 87, '119': 91, '120': 96, '121': 84, '122': 70, '123': 55,
-  '124': 48, '125': 62, '126': 75, '127': 83, '128': 91, '129': 66,
-}
-
-function densityClass(pct) {
-  if (pct === undefined) return ''
-  if (pct >= 95) return 'bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]'
-  if (pct >= 85) return 'bg-orange-500'
-  if (pct >= 75) return 'bg-amber-400'
-  if (pct >= 60) return 'bg-emerald-400'
-  if (pct >= 40) return 'bg-emerald-600'
-  return 'bg-emerald-900/50'
-}
+// Removed static SECTION grid logic
 
 export default function CrowdOps() {
   const [crowdData, setCrowdData] = useState(generateCrowdData)
@@ -132,33 +108,14 @@ export default function CrowdOps() {
             </div>
 
             <div className="flex flex-wrap gap-3 mb-4 text-[0.65rem] font-medium text-slate-900/60 dark:text-white/60">
-              {[['bg-emerald-900/50', '< 40%'], ['bg-emerald-600', '40-60%'], ['bg-emerald-400', '60-75%'], ['bg-amber-400', '75-85%'], ['bg-orange-500', '85-95%'], ['bg-red-500', '> 95% ⚠️']].map(([cls, lbl]) => (
+              {[['bg-emerald-500', '< 75% Capacity'], ['bg-amber-500', '75-90% Capacity'], ['bg-red-500', '> 90% (Critical)']].map(([cls, lbl]) => (
                 <div key={cls} className="flex items-center gap-1.5">
                   <div className={cn("w-3.5 h-3.5 rounded-sm", cls)} /> {lbl}
                 </div>
               ))}
             </div>
 
-            <div className="grid grid-cols-6 gap-1.5 bg-black/20 p-2 rounded-xl border border-slate-300 dark:border-white/5">
-              {SECTION_GRID.flat().map((cell, i) => (
-                cell.startsWith('—') ? (
-                  <div key={i} className="h-10 rounded bg-cyan-500/5 border border-cyan-500/10 flex items-center justify-center text-[0.65rem] text-slate-900/40 dark:text-white/40">
-                    {cell === '—PITCH—' && '⚽'}
-                  </div>
-                ) : (
-                  <div
-                    key={i}
-                    title={`Section ${cell}: ${SECTION_DENSITY[cell]}%`}
-                    className={cn(
-                      "h-10 rounded flex items-center justify-center text-[0.65rem] font-bold text-slate-900 dark:text-white transition-colors duration-1000",
-                      densityClass(SECTION_DENSITY[cell])
-                    )}
-                  >
-                    {cell}
-                  </div>
-                )
-              ))}
-            </div>
+            <LiveTrafficVisualizer crowdData={crowdData} />
           </Card>
 
           <Card className="p-6">

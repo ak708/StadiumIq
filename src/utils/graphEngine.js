@@ -44,6 +44,12 @@ export const STADIUM_GRAPH = {
     { from: 'GATE_C', to: 'GATE_D', weight: 200 },
     
     { from: 'GATE_D', to: 'GATE_A', weight: 200 },
+    
+    // Extra parking links so there's alternative routes
+    { from: 'PARKING_A1', to: 'GATE_D', weight: 180 },
+    { from: 'PARKING_A1', to: 'GATE_B', weight: 250 },
+    { from: 'PARKING_B1', to: 'GATE_A', weight: 250 },
+    { from: 'PARKING_B1', to: 'GATE_C', weight: 150 },
   ]
 };
 
@@ -117,4 +123,80 @@ export function findNearestNodeOfType(graph, startNodeId, targetType) {
   }
 
   return { error: `No ${targetType} found reachable from ${startNodeId}` };
+}
+
+export function calculateDynamicRoute(graph, startNodeId, endNodeId, crowdData = []) {
+  if (!graph.nodes[startNodeId] || !graph.nodes[endNodeId]) {
+    return null;
+  }
+
+  const adj = buildAdjacencyList(graph);
+  
+  // Create a fast lookup for crowd density based on node label or ID
+  // e.g. "Gate A" -> 95
+  const densityMap = {};
+  crowdData.forEach(g => {
+    densityMap[g.gate] = g.current;
+  });
+
+  const distances = {};
+  const previous = {};
+  const queue = new Set(Object.keys(graph.nodes));
+
+  for (const node of queue) {
+    distances[node] = Infinity;
+    previous[node] = null;
+  }
+  distances[startNodeId] = 0;
+
+  while (queue.size > 0) {
+    let minNode = null;
+    for (const node of queue) {
+      if (minNode === null || distances[node] < distances[minNode]) {
+        minNode = node;
+      }
+    }
+
+    if (distances[minNode] === Infinity) {
+      break;
+    }
+
+    queue.delete(minNode);
+
+    if (minNode === endNodeId) {
+      let path = [];
+      let current = minNode;
+      while (current !== null) {
+        path.unshift(current);
+        current = previous[current];
+      }
+      return {
+        distance: distances[minNode],
+        path: path
+      };
+    }
+
+    for (const neighbor of adj[minNode]) {
+      // Dynamic Weight Penalty
+      // If the neighbor node represents a gate that has high crowd density,
+      // artificially increase the weight of traveling to it!
+      const neighborLabel = graph.nodes[neighbor.node]?.label;
+      const density = densityMap[neighborLabel] || 50; // default 50%
+      
+      let dynamicWeight = neighbor.weight;
+      if (density >= 90) {
+        dynamicWeight *= 5; // Heavy penalty for critical congestion
+      } else if (density >= 75) {
+        dynamicWeight *= 2; // Moderate penalty
+      }
+
+      const alt = distances[minNode] + dynamicWeight;
+      if (alt < distances[neighbor.node]) {
+        distances[neighbor.node] = alt;
+        previous[neighbor.node] = minNode;
+      }
+    }
+  }
+
+  return null;
 }

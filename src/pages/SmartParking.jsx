@@ -9,22 +9,26 @@ import { cn } from '@/lib/utils'
 
 import { LuCircle, LuTicket, LuCar, LuMapPin, LuNavigation, LuArrowDownToLine, LuZap } from 'react-icons/lu';
 
-const MATCHES = [
-  { id: 'SF1', label: 'Semifinal 1 — 15 Jul 2026, 21:00 ET', stadium: 'MetLife Stadium, NJ' },
-  { id: 'SF2', label: 'Semifinal 2 — 16 Jul 2026, 18:00 ET', stadium: 'Rose Bowl, CA' },
-  { id: 'F1',  label: 'Final — 19 Jul 2026, 20:00 ET',       stadium: 'MetLife Stadium, NJ' },
+const ALL_MATCHES = [
+  { id: 'm1', label: 'USA vs England — Jul 4, 2026, 19:00 EST', stadium: 'MetLife Stadium, NJ' },
+  { id: 'm2', label: 'Brazil vs France — Jul 7, 2026, 20:00 EST', stadium: 'MetLife Stadium, NJ' },
+  { id: 'm3', label: 'Argentina vs Spain — Jul 10, 2026, 18:00 EST', stadium: 'MetLife Stadium, NJ' },
+  { id: 'F1', label: 'Final: Arsenal vs Man City — Jul 19, 2026, 20:00 EST', stadium: 'Emirates Stadium' }
 ]
 
 const ENTRY_GATES = ['A', 'B']
 const VEHICLE_TYPES = ['Standard', 'Accessible (Wheelchair)', 'EV / Hybrid', 'Motorcycle']
 
+import { useAuth } from '@/context/AuthContext'
+
 export default function SmartParking({ ctx }) {
+  const { profile } = useAuth()
   const graph = STADIUM_PARKING_GRAPH
 
   const [step, setStep] = useState(1) // 1: form, 2: result, 3: qr
   const [form, setForm] = useState({
     name: '', email: '', phone: '', vehicleReg: '',
-    matchId: 'SF1', entryGate: 'A', vehicleType: 'Standard',
+    matchId: '', entryGate: 'A', vehicleType: 'Standard',
     fanStatus: 'Ticket Holder', ticketNumber: '',
     needsAccessible: false, needsEV: false,
   })
@@ -40,6 +44,21 @@ export default function SmartParking({ ctx }) {
       if (field === 'vehicleType') {
         next.needsAccessible = value.includes('Accessible')
         next.needsEV = value.includes('EV')
+      }
+      if (field === 'matchId' && next.fanStatus === 'Ticket Holder' && profile?.tickets) {
+        // Auto-fill ticket number when match is selected
+        const tkt = profile.tickets.find(t => next.matchId === t.match)
+        if (tkt) next.ticketNumber = tkt.code
+      }
+      if (field === 'fanStatus') {
+        if (value === 'Ticket Holder') {
+          // Reset match selection so it can be filtered
+          next.matchId = ''
+          next.ticketNumber = ''
+        } else {
+          // Default to first match if no ticket
+          next.matchId = ALL_MATCHES[0].id
+        }
       }
       return next
     })
@@ -65,7 +84,14 @@ export default function SmartParking({ ctx }) {
       return
     }
 
-    const match = MATCHES.find(m => m.id === form.matchId)
+    // We use the ID or the exact Match Name to find the stadium
+    let match = ALL_MATCHES.find(m => m.id === form.matchId || m.label.includes(form.matchId))
+    if (!match && profile?.tickets) {
+      const userTicket = profile.tickets.find(t => t.match === form.matchId)
+      if (userTicket) {
+        match = { id: userTicket.match, label: `${userTicket.match} — ${userTicket.date}, ${userTicket.time}`, stadium: 'MetLife Stadium, NJ' }
+      }
+    }
 
     if (form.fanStatus === 'Fan Zone (No Ticket)') {
       // Put them in a waitlist queue
@@ -222,11 +248,21 @@ export default function SmartParking({ ctx }) {
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-medium text-slate-900/60 dark:text-white/60">Match</label>
                   <Select value={form.matchId} onValueChange={v => handleChange('matchId', v)}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger><SelectValue placeholder="Select Match" /></SelectTrigger>
                     <SelectContent>
-                      {MATCHES.map(m => <SelectItem key={m.id} value={m.id}>{m.label}</SelectItem>)}
+                      {form.fanStatus === 'Ticket Holder' && profile?.tickets?.length > 0
+                        ? profile.tickets.map(tkt => (
+                            <SelectItem key={tkt.match} value={tkt.match}>
+                              {tkt.match} — {tkt.date}
+                            </SelectItem>
+                          ))
+                        : ALL_MATCHES.map(m => <SelectItem key={m.id} value={m.id}>{m.label}</SelectItem>)
+                      }
                     </SelectContent>
                   </Select>
+                  {form.fanStatus === 'Ticket Holder' && (!profile?.tickets || profile.tickets.length === 0) && (
+                    <div className="text-xs text-red-500 mt-1">You have no tickets on this account. Purchase a ticket in the portal first!</div>
+                  )}
                 </div>
                 <div className="grid grid-cols-2 gap-4">
                   <div className="flex flex-col gap-1.5">

@@ -32,7 +32,7 @@ export function useSyncQueue(collectionName) {
 
       await batch.commit()
       
-      console.log(`[SyncQueue] Successfully synced ${queue.length} items to ${collectionName}`)
+      // Successfully synced
       setQueue([])
       setLastSynced(new Date())
     } catch (error) {

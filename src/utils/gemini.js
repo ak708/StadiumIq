@@ -68,7 +68,7 @@ STRICT GUARDRAILS:
 
 // Simulated tool functions
 async function executeTool(name, args) {
-  console.log(`Executing tool ${name} with args:`, args)
+  // Executing tool
   if (name === 'checkQueueTime') {
     return { status: 'success', waitTimeMinutes: Math.floor(Math.random() * 10) + 2, recommendation: 'Queue is moving quickly.' }
   } else if (name === 'getAvailableParking') {

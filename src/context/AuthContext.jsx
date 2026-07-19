@@ -236,6 +236,10 @@ export function AuthProvider({ children }) {
     activeTicketId,
     setActiveTicketId,
     activeTicket: profile?.tickets?.find(t => t.code === activeTicketId) || null,
+    setDemoRole: (newRole) => {
+      // Hackathon demo helper
+      if (profile) setProfile({ ...profile, role: newRole })
+    },
     // Convenience
     displayName: profile?.name || user?.displayName || user?.email?.split('@')[0] || 'Guest',
     avatarUrl: profile?.avatar || user?.photoURL || null,

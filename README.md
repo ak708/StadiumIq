@@ -3,15 +3,18 @@
 ## Challenge 4: Smart Stadiums & Tournament Operations
 StadiumIQ is a next-generation fan experience and stadium operations platform designed for large-scale sporting events like the FIFA World Cup.
 
-### Persona & Approach
-**Persona:** Stadium Operations Manager & Diverse Fan Demographics
-**Approach & Logic:** 
+### Your chosen vertical
+Smart Stadiums & Tournament Operations.
+
+### Approach and logic
 This application bridges the gap between complex stadium logistics and individual fan experiences. 
 - **The Operations Logic:** By integrating AI-driven insights (CrowdOps) and real-time mapping, stadium staff can dynamically allocate resources, control gate flow, and monitor high-risk zones.
 - **The Fan Logic:** Fans receive personalized contextual dashboards based on their ticket status (e.g., standard vs. VIP). 
-- **Inclusivity First:** We assume that a truly "smart" stadium must serve everyone. The app logic includes dynamic UI stripping (Sensory Calm Mode) and live text-to-speech pipelines to accommodate neurodivergent and visually impaired users.
 
-### Assumptions Made
+### How the solution works
+StadiumIQ is a modular React application powered by Firebase and Gemini AI. Staff utilize the CrowdOps dashboard to broadcast real-time updates and parse SOPs dynamically. Fans navigate using a 3D Canvas integration, switch between standard and premium modes effortlessly via context-driven state management, and rely on real-time data syncs for ticket transfers. 
+
+### Any assumptions made
 1. The app assumes the existence of IoT sensors at gates to feed data into the CrowdOps module.
 2. We assume users have stable internet connections for real-time Firebase syncing, though caching is partially implemented for critical FAQ interactions.
 3. The AI travel agent and operational briefing rely on prompt-engineered Gemini instances to synthesize real-time rules.

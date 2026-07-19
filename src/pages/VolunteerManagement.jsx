@@ -41,14 +41,14 @@ export default function VolunteerManagement() {
     e.preventDefault()
     if (!phone) return
     setOtpSent(true)
-    console.log(`[Cloud Function Mock] Sending OTP to ${phone} via TextLocal API`)
+    // [Cloud Function Mock] Sending OTP to ${phone} via TextLocal API
   }
 
   const handleVerifyOTP = (e) => {
     e.preventDefault()
     if (otp.length === 6) {
       setRegistered(true)
-      console.log(`[Firestore Mock] Registered volunteer ${name} in ${zone} for seats ${seats}`)
+      // [Firestore Mock] Registered volunteer ${name} in ${zone} for seats ${seats}
       setVolunteers(prev => [...prev, { id: Date.now(), name, phone, zone, seats }])
     } else {
       alert('Invalid OTP. Use a 6-digit code.')
